@@ -1,28 +1,43 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { css } from "emotion";
 
-class App extends Component {
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Details from "./Components/details";
+import { Home } from "./Components/home";
+
+export default class App extends Component {
+  titles = ["Popular Movies", "Popular Series", "Family", "Documentary"];
+  prefix = this.titles.reduce((acc, e) => {
+    acc.push(e.replace(/(\s)/g, "").toLowerCase());
+    return acc;
+  }, []);
+  urls = ["movie?", "tv?", "movie?with_genres=10751&", "tv?with_genres=99&"];
+  container = css`
+    max-width: 80%;
+    margin: 0 auto;
+    text-align: center;
+  `;
+
+ 
+
+  displayRoutes() {
+    return this.prefix.map((e, i) => (
+      <Route path={`/${e}/:id`} component={Details} key={i}/>
+    ));
+  }
+
   render() {
+    //console.log(this.prefix)
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Router>
+        <div className={this.container}>
+          
+          <Switch>
+          <Route exact path={`/`} component={Home}/>
+          {this.displayRoutes()}
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
-
-export default App;
