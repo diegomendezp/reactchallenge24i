@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import  DetailsItem  from "./detailsItem";
+import DetailsItem from "./detailsItem";
 
 export default class Details extends Component {
   constructor(props) {

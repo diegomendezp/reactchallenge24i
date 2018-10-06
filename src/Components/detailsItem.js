@@ -1,16 +1,20 @@
 import React, {Component} from "react";
 import { css } from "emotion";
 import { Link } from "react-router-dom";
-import * as shaka from "shaka-player";
-//import Hls from 'hls.js/src/hls'
+import shaka from "shaka-player";
+import axios from 'axios'
+
 
 
 export default class DetailsItem extends Component{
   constructor(props) {
     super(props);
   }
+
+  //https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd
   manifestUri =
-    "../playlist.m3u8";
+    "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
+
 
   
   initApp = () => {
@@ -27,17 +31,17 @@ export default class DetailsItem extends Component{
     }
   };
 
-  componentDidMount(){
+play(){
     this.initApp()
   }
 
   initPlayer = () => {
     // Create a Player instance.
-    let video = document.getElementById("video");
-    console.log(video);
+    let video = document.getElementById(`video${this.props.id}`);
+
     let player = new shaka.Player(video);
 
-
+    
     
    //
 
@@ -48,13 +52,20 @@ export default class DetailsItem extends Component{
 
     // Try to load a manifest.
     // This is an asynchronous process.
+   
+   axios.get(this.manifestUri)
+   .then(res => {
+     console.log(res.data)
     player
-      .load(this.manifestUri)
-      .then(function() {
-        // This runs if the asynchronous load is successful.
-        console.log("The video has now been loaded!");
-      })
-      .catch(err => console.log(err)); // onError is executed if the asynchronous load fails.
+    .load(shaka.hls.HlsParser(res.data))
+    .then(res => {
+      
+      // This runs if the asynchronous load is successful.
+      console.log("The video has now been loaded!");
+    })
+    .catch(err => console.log(err));
+  })
+  .catch(err => console.log(err)); // onError is executed if the asynchronous load fails.
   };
 
   itemImg = css`
@@ -98,12 +109,14 @@ export default class DetailsItem extends Component{
             </p>
           </li>
         </ul>
+        <button onClick={() => this.play()}> PLAY</button>
         <video
-          id="video"
+        title={`video${this.props.id}`}
+          id={`video${this.props.id}`}
           width="200"
           poster={this.imageUrl}
           controls
-          autoPlay
+          allow="autoplay"
         />
         <p>
           <a href={this.props.homepage}>Go to the official site</a>
