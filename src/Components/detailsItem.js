@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import { css } from "emotion";
-import { Link } from "react-router-dom";
 import shaka from "shaka-player";
 import axios from 'axios'
 
@@ -15,7 +14,7 @@ export default class DetailsItem extends Component{
   manifestUri =
     "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
 
-
+  
   
   initApp = () => {
     // Install built-in polyfills to patch browser incompatibilities.
@@ -78,7 +77,6 @@ play(){
   render() {
     return (
       <div>
-        <Link to="/">Home</Link>
         {this.props.url === "movie" ? (
           <h2>{this.props.title}</h2>
         ) : (
