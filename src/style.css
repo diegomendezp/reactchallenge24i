@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 img {
   object-fit: cover;
 }
@@ -5,4 +6,6 @@ img {
 body {
   margin: 0;
   padding: 0;
+  font-family: Roboto;
 }
+

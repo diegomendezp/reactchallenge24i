@@ -37,7 +37,6 @@ play(){
   initPlayer = () => {
     // Create a Player instance.
     let video = document.getElementById(`video${this.props.id}`);
-
     let player = new shaka.Player(video);
 
     
@@ -52,73 +51,103 @@ play(){
     // Try to load a manifest.
     // This is an asynchronous process.
    
-   axios.get(this.manifestUri)
-   .then(res => {
-     console.log(res.data)
+ 
     player
-    .load(shaka.hls.HlsParser(res.data))
+    .load(this.manifestUri, {headers: {"Accept-Ranges":"bytes", "Access-Control-Allow-Origin":"*"}})
     .then(res => {
       
       // This runs if the asynchronous load is successful.
       console.log("The video has now been loaded!");
     })
     .catch(err => console.log(err));
-  })
-  .catch(err => console.log(err)); // onError is executed if the asynchronous load fails.
-  };
+  }
 
   itemImg = css`
-    width: 400px;
-    @media (max-width: 680px) {
-      width: 300px;
-    }
+    width: 80%;
+    
   `;
+  
+  itemContainer = css`
+  display:flex;
+  margin-top: 2%;
+  h1, h2, h3, h4 {
+    margin: 0;
+  }
+  @media (max-width: 680px) {
+    width: 100%;
+    display:block;
+  }
+`
+  column1 = css`
+    text-align: left;
+    width: 50%;
+    @media (max-width: 680px) {
+      width: 100%;
+      display:block;
+      text-align: center;
+    }
+  `
+
+  column2 = css`
+  width: 50%;
+  display:inline-block;
+  @media (max-width: 680px) {
+    width: 100%;
+  }
+`
+
   imageUrl = `http://image.tmdb.org/t/p/w342/${this.props.poster_path}`;
   render() {
     return (
-      <div>
-        {this.props.url === "movie" ? (
-          <h2>{this.props.title}</h2>
-        ) : (
-          <h2>{this.props.name}</h2>
-        )}
-        <p>
-          <strong>Description: </strong>
-          {this.props.overview}
-        </p>
-        <img src={this.imageUrl} alt="poster" className={this.itemImg} />
-        <ul>
-          <li>
-            {this.props.url === "movie" ? (
+      <div className={this.itemContainer}>
+        <div className={this.column1}>
+          {this.props.url === "movie" ? (
+            <h2>{this.props.title}</h2>
+          ) : (
+            <h2>{this.props.name}</h2>
+          )}
+          <p>
+            <strong>Description: </strong>
+            {this.props.overview}
+          </p> 
+            <div>
+              {this.props.url === "movie" ? (
+                <p>
+                  <strong>Bugdet: </strong>
+                  {this.props.budget} $
+                </p>
+              ) : (
+                <p>
+                  <strong>Number of seasons: </strong>
+                  {this.props.seasons.length}
+                </p>
+              )}
+            </div>
+            <div>
               <p>
-                <strong>Bugdet: </strong>
-                {this.props.budget} $
+                <strong>Puntuation: </strong> {this.props.vote_average}
               </p>
-            ) : (
-              <p>
-                <strong>Number of seasons: </strong>
-                {this.props.seasons.length}
-              </p>
-            )}
-          </li>
-          <li>
-            <p>
-              <strong>Puntuation: </strong> {this.props.vote_average}
-            </p>
-          </li>
-        </ul>
-        <button onClick={() => this.play()}> PLAY</button>
-        <video
-        title={`video${this.props.id}`}
-          id={`video${this.props.id}`}
-          width="200"
-          poster={this.imageUrl}
-          controls
-          allow="autoplay"
-        />
-        <p>
-          <a href={this.props.homepage}>Go to the official site</a>
-        </p>
+            </div>
+          
+          {/* <button onClick={() => this.play()}> PLAY</button>
+          <video
+          title={`video${this.props.id}`}
+            id={`video${this.props.id}`}
+            width="200"
+            poster={this.imageUrl}
+            controls
+            autoPlay
+          >
+          <source src={this.manifestUri}></source>
+          </video> */}
+          <p>
+            <a href={this.props.homepage}>Go to the official site</a>
+          </p>
+        </div>
+
+         <div className={this.column2}>
+           <img src={this.imageUrl} alt="poster" className={this.itemImg} />
+         </div>
       </div>
     );
   }

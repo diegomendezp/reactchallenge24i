@@ -10,7 +10,10 @@ export default class List extends Component {
       items: null
     };
   }
-
+  
+  listStyle = css`
+  margin-top: 4%;
+`
   list = css`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
@@ -35,7 +38,7 @@ export default class List extends Component {
   }
   render() {
     return (
-      <div>
+      <div className={this.listStyle}>
         <h2>
         	{this.props.title}
         </h2>
