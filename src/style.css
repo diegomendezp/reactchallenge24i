@@ -9,3 +9,8 @@ body {
   font-family: Roboto;
 }
 
+.playButton {
+  display: block;
+  margin-bottom: 2%;
+  margin: 2% auto;
+}

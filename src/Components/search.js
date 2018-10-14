@@ -55,7 +55,7 @@ export default class Search extends Component {
         .get(
           `https://api.themoviedb.org/3/search/${this.state.filter}?query=${
             this.state.search
-          }&api_key=9d065cdf80054d8b30619f0fc15776d6&format=json`
+          }&api_key=${process.env.REACT_APP_API_KEY}&format=json`
         )
         .then(res => {
           this.setState({

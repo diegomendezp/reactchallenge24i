@@ -1,18 +1,22 @@
 import React, {Component} from "react";
 import { css } from "emotion";
 import shaka from "shaka-player";
-import axios from 'axios'
+
 
 
 
 export default class DetailsItem extends Component{
   constructor(props) {
     super(props);
+    this.state = {
+      autoPlay: false,
+      hidden: true
+    }
   }
 
   //https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd
   manifestUri =
-    "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
+    "https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd";
 
   
   
@@ -30,28 +34,28 @@ export default class DetailsItem extends Component{
     }
   };
 
-play(){
+  play(){
     this.initApp()
   }
 
   initPlayer = () => {
     // Create a Player instance.
     let video = document.getElementById(`video${this.props.id}`);
+    video.requestFullscreen()
     let player = new shaka.Player(video);
 
-    
+    this.setState({
+      autoPlay: true,
+      hidden: false
+    })
     
    //
 
     // Attach player to the window to make it easy to access in the JS console.
     window.player = player;
-
     // Listen for error events.
-
     // Try to load a manifest.
     // This is an asynchronous process.
-   
- 
     player
     .load(this.manifestUri, {headers: {"Accept-Ranges":"bytes", "Access-Control-Allow-Origin":"*"}})
     .then(res => {
@@ -129,17 +133,18 @@ play(){
               </p>
             </div>
           
-          {/* <button onClick={() => this.play()}> PLAY</button>
+          <button className="playButton" onClick={() => this.play()}> PLAY</button>
           <video
           title={`video${this.props.id}`}
             id={`video${this.props.id}`}
             width="200"
             poster={this.imageUrl}
             controls
-            autoPlay
+            hidden={this.state.hidden}
+            autoPlay={this.state.autoPlay}
           >
           <source src={this.manifestUri}></source>
-          </video> */}
+          </video>
           <p>
             <a href={this.props.homepage}>Go to the official site</a>
           </p>
